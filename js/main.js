@@ -4,7 +4,6 @@ if (document.querySelector("[data-birthday]")) calculateAge();
 // Calculate age from birthday date
 function calculateAge() {
   var ageField = document.querySelector("[data-birthday]");
-
   var birthday = ageField.getAttribute("data-birthday");
 
   var birthdayArray = birthday.split("/");
@@ -13,14 +12,32 @@ function calculateAge() {
   var birthMonth = Number(birthdayArray[1]);
   var birthYear = Number(birthdayArray[2]);
 
-  var age = getAge(new Date(birthYear, birthMonth, birthDay));
+  var age = getAge(birthYear, birthMonth, birthDay);
 
   ageField.innerHTML = age;
 
-  function getAge(birthdayDate) {
-      var diff_ms = Date.now() - birthdayDate.getTime();
-      var age_dt = new Date(diff_ms);
-      return Math.abs(age_dt.getUTCFullYear() - 1970);
+  function getAge(birthYear, birthMonth, birthDay) {
+    var today = new Date();
+
+    var todayYear = today.getFullYear();
+    var todayMonth = today.getMonth() + 1;
+    var todayDay = today.getDate();
+
+    let age = todayYear - birthYear;
+
+    if (todayMonth > birthMonth) {
+      return age;
+    } else if (todayDay > birthDay && todayMonth === birthMonth) {
+      return age;
+    } else if (todayDay < birthDay && todayMonth === birthMonth) {
+      age = age - 1;
+      return age;
+    } else if (todayDay === birthDay && todayMonth === birthMonth) {
+      return age;
+    } else if (todayMonth < birthMonth) {
+      age = age - 1;
+      return age;
+    }
   }
 }
 
